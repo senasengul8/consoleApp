@@ -17,6 +17,12 @@ I have a C# struct that represents the system information you want to retrieve: 
 Native method: This class provides a platform invocation services (P/Invoke) method to call a method (getSystemInfo) from a native DLL (mydll.dll). The DLL path is specified using the DllImport attribute.
 
 The Program class contains the Main method, which is the entry point of the program. Inside the Main method, it calls the getSystemInfo method from the NativeMethods class to retrieve system information. The information is then displayed on the console every 30 seconds.
+
+How I connect c++ and c#
+```diff
+I created dll file:
+ g++ -shared -o mydll.dll dllmain.cpp -lPdh  
+```
 ```diff
 In C++:
 ```
@@ -80,6 +86,18 @@ pLoc->Release();
 CoUninitialize();
 
 ```
+errors on temperature
+```diff
+ 2/12.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe: C:\Users\nur20\AppData\Local\Temp\ccsE0HUx.o:dllmain.cpp:(.text+0x55e): undefined reference to `__imp_CoUninitialize'
+C:/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/12.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe: C:\Users\nur20\AppData\Local\Temp\ccsE0HUx.o:dllmain.cpp:(.text+0x5d3): undefined reference to `__imp_CoUninitialize'
+C:/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/12.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe: C:\Users\nur20\AppData\Local\Temp\ccsE0HUx.o:dllmain.cpp:(.text$_ZN7_bstr_t6Data_tC1EPKc[_ZN7_bstr_t6Data_tC1EPKc]+0x2f): undefined reference to `_com_util::ConvertStringToBSTR(char const*)'
+```
+
+I tried 
+g++ -shared -o mydll.dll dllmain.cpp -lole32 -lcomsuppw
+
+The -lole32 and -lcomsuppw flags tell the linker to link against the ole32.lib and comsuppw.lib libraries, respectively, but it does not solve issue.
+
 
 
 
